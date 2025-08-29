@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  mcp-sqlserver:
+    image: mcp-sqlserver:final
+    container_name: mcp-sqlserver
+    restart: unless-stopped
+    
+    # Configurações de rede
+    networks:
+      - mcp-network
+    
+    # Porta padrão
+    ports:
+      - "${MCP_PORT:-4000}:4000"
+    
+    # Variáveis de ambiente
+    environment:
+      # SQL Server Database Configuration
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-1433}
+      - DB_NAME=${DB_NAME:-master}
+      - DB_USER=${DB_USER:-sa}
+      - DB_PASSWORD=${DB_PASSWORD}
+      
+      # MCP Server Configuration
+      - MCP_MODE=${MCP_MODE:-READ_ONLY}
+      - MCP_PORT=${MCP_PORT:-4000}
+      - MCP_HOST=0.0.0.0
+      
+      # Security Settings
+      - QUERY_TIMEOUT=${QUERY_TIMEOUT:-30}
+      - MAX_RESULT_ROWS=${MAX_RESULT_ROWS:-1000}
+      - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-60}
+      - CONNECTION_POOL_SIZE=${CONNECTION_POOL_SIZE:-10}
+      - CONNECTION_POOL_MAX_OVERFLOW=${CONNECTION_POOL_MAX_OVERFLOW:-20}
+      
+      # Logging Configuration
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      
+      # Performance Settings
+      - ASYNC_POOL_SIZE=${ASYNC_POOL_SIZE:-5}
+      - MAX_CONCURRENT_QUERIES=${MAX_CONCURRENT_QUERIES:-10}
+      
+      # Health Check Settings
+      - HEALTH_CHECK_INTERVAL=${HEALTH_CHECK_INTERVAL:-30}
+      - HEALTH_CHECK_TIMEOUT=${HEALTH_CHECK_TIMEOUT:-5}
+      
+      # Timezone
+      - TZ=${TZ:-America/Sao_Paulo}
+    
+    # Volumes para logs e configurações
+    volumes:
+      - mcp-logs:/app/logs
+      - mcp-config:/app/config
+      - ./logs:/app/logs:rw
+    
+    # Health check personalizado
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Dependências (opcional - se SQL Server também estiver no compose)
+    depends_on:
+      - sqlserver
+    
+    # Configurações de recursos
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # SQL Server para desenvolvimento/teste (opcional)
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mcp-sqlserver-db
+    restart: unless-stopped
+    
+    networks:
+      - mcp-network
+    
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD:-YourStrongPassword123!}
+      - MSSQL_PID=Express
+    
+    ports:
+      - "${DB_PORT:-1433}:1433"
+    
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./sql-scripts:/docker-entrypoint-initdb.d:ro
+    
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${DB_PASSWORD:-YourStrongPassword123!} -Q 'SELECT 1'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+# Rede isolada
+networks:
+  mcp-network:
+    driver: bridge
+    name: mcp-network
+
+# Volumes nomeados
+volumes:
+  mcp-logs:
+    driver: local
+  mcp-config:
+    driver: local
+  sqlserver-data:
+    driver: local

@@ -1,0 +1,88 @@
+version: '3.8'
+
+# Docker Compose apenas para MCP Server (sem SQL Server incluso)
+# Use este arquivo quando você já tiver um SQL Server externo
+
+services:
+  mcp-sqlserver:
+    image: mcp-sqlserver:final
+    container_name: mcp-sqlserver
+    restart: unless-stopped
+    
+    # Configurações de rede
+    networks:
+      - mcp-network
+    
+    # Porta padrão
+    ports:
+      - "${MCP_PORT:-4000}:4000"
+    
+    # Variáveis de ambiente
+    environment:
+      # SQL Server Database Configuration
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-1433}
+      - DB_NAME=${DB_NAME:-master}
+      - DB_USER=${DB_USER:-sa}
+      - DB_PASSWORD=${DB_PASSWORD}
+      
+      # MCP Server Configuration
+      - MCP_MODE=${MCP_MODE:-READ_ONLY}
+      - MCP_PORT=${MCP_PORT:-4000}
+      - MCP_HOST=0.0.0.0
+      
+      # Security Settings
+      - QUERY_TIMEOUT=${QUERY_TIMEOUT:-30}
+      - MAX_RESULT_ROWS=${MAX_RESULT_ROWS:-1000}
+      - RATE_LIMIT_PER_MINUTE=${RATE_LIMIT_PER_MINUTE:-60}
+      - CONNECTION_POOL_SIZE=${CONNECTION_POOL_SIZE:-10}
+      - CONNECTION_POOL_MAX_OVERFLOW=${CONNECTION_POOL_MAX_OVERFLOW:-20}
+      
+      # Logging Configuration
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      
+      # Performance Settings
+      - ASYNC_POOL_SIZE=${ASYNC_POOL_SIZE:-5}
+      - MAX_CONCURRENT_QUERIES=${MAX_CONCURRENT_QUERIES:-10}
+      
+      # Health Check Settings
+      - HEALTH_CHECK_INTERVAL=${HEALTH_CHECK_INTERVAL:-30}
+      - HEALTH_CHECK_TIMEOUT=${HEALTH_CHECK_TIMEOUT:-5}
+      
+      # Timezone
+      - TZ=${TZ:-America/Sao_Paulo}
+    
+    # Volumes para logs
+    volumes:
+      - mcp-logs:/app/logs
+      - ./logs:/app/logs:rw
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Configurações de recursos
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+# Rede isolada
+networks:
+  mcp-network:
+    driver: bridge
+    name: mcp-network
+
+# Volumes nomeados
+volumes:
+  mcp-logs:
+    driver: local

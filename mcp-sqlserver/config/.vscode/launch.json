@@ -1,0 +1,88 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "MCP Server: Debug Local",
+      "type": "python",
+      "request": "launch",
+      "module": "src.main",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "LOG_LEVEL": "DEBUG",
+        "ENVIRONMENT": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "stopOnEntry": false,
+      "justMyCode": true,
+      "args": []
+    },
+    {
+      "name": "MCP Server: Debug READ_ONLY",
+      "type": "python",
+      "request": "launch",
+      "module": "src.main",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "LOG_LEVEL": "DEBUG",
+        "MCP_MODE": "READ_ONLY",
+        "ENVIRONMENT": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "stopOnEntry": false,
+      "justMyCode": true,
+      "args": []
+    },
+    {
+      "name": "MCP Server: Debug FULL_ACCESS",
+      "type": "python",
+      "request": "launch",
+      "module": "src.main",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "LOG_LEVEL": "DEBUG",
+        "MCP_MODE": "FULL_ACCESS",
+        "ENVIRONMENT": "development"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "stopOnEntry": false,
+      "justMyCode": true,
+      "args": []
+    },
+    {
+      "name": "Test: Example Client",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/example_client.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      },
+      "stopOnEntry": false,
+      "justMyCode": true,
+      "args": []
+    },
+    {
+      "name": "Debug: Connection Test",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/database/connection.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "LOG_LEVEL": "DEBUG"
+      },
+      "envFile": "${workspaceFolder}/.env",
+      "stopOnEntry": false,
+      "justMyCode": true,
+      "args": []
+    }
+  ]
+}

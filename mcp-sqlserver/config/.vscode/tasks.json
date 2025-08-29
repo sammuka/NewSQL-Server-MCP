@@ -1,0 +1,253 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MCP Server: Start Local",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "src.main"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Inicia o MCP Server localmente"
+    },
+    {
+      "label": "Docker: Build Image",
+      "type": "shell",
+      "command": "docker",
+      "args": ["build", "-t", "mcp-sqlserver", "."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Constrói a imagem Docker do MCP Server"
+    },
+    {
+      "label": "Docker: Up (Full Stack)",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker/docker-compose.yml", "up", "-d"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Inicia MCP Server + SQL Server com Docker Compose"
+    },
+    {
+      "label": "Docker: Up (MCP Only)",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker/docker-compose.mcp-only.yml", "up", "-d"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Inicia apenas MCP Server com Docker Compose"
+    },
+    {
+      "label": "Docker: Down",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker/docker-compose.yml", "down"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Para todos os containers Docker Compose"
+    },
+    {
+      "label": "Docker: Logs",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker/docker-compose.yml", "logs", "-f", "mcp-sqlserver"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Mostra logs do MCP Server em tempo real"
+    },
+    {
+      "label": "Test: Client Example",
+      "type": "shell",
+      "command": "python",
+      "args": ["examples/example_client.py"],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Executa o cliente de exemplo para testar o MCP Server"
+    },
+    {
+      "label": "Test: Health Check",
+      "type": "shell",
+      "command": "curl",
+      "args": ["-f", "http://localhost:4000/health"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "detail": "Verifica se o MCP Server está saudável"
+    },
+    {
+      "label": "Setup: Install Dependencies",
+      "type": "shell",
+      "command": "pip",
+      "args": ["install", "-r", "requirements.txt"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Instala todas as dependências Python"
+    },
+    {
+      "label": "Setup: Create Virtual Environment",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "venv", "venv"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Cria ambiente virtual Python"
+    },
+    {
+      "label": "Setup: Copy Environment File",
+      "type": "shell",
+      "command": "cp",
+      "args": [".env.example", ".env"],
+      "windows": {
+        "command": "copy",
+        "args": [".env.example", ".env"]
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Copia arquivo de exemplo .env"
+    },
+    {
+      "label": "Clean: Remove Cache",
+      "type": "shell",
+      "command": "find",
+      "args": [".", "-type", "f", "-name", "*.pyc", "-delete"],
+      "windows": {
+        "command": "for",
+        "args": ["/r", ".", "%i", "in", "(*.pyc)", "do", "del", "\"%i\""]
+      },
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Remove arquivos cache Python"
+    },
+    {
+      "label": "Monitor: Watch Logs",
+      "type": "shell",
+      "command": "docker-compose",
+      "args": ["-f", "docker/docker-compose.yml", "logs", "-f", "--tail=50"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "detail": "Monitora logs de todos os containers"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+# .dockerignore - Otimização para menor contexto de build
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Documentação
+README.md
+STRUCTURE.md
+docs/
+*.md
+
+# Exemplos e scripts
+examples/
+scripts/
+*.bat
+Makefile
+
+# Logs e dados temporários
+logs/
+*.log
+*.tmp
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Configurações locais
+.env
+.env.local
+.env.*.local
+
+# VS Code config (mas mantém .env.example)
+config/.vscode/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Outros arquivos desnecessários
+.coverage
+.nyc_output
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
