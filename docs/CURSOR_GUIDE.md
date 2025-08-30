@@ -2,13 +2,15 @@
 
 **Configuração em 5 minutos do MCP SQL Server no Cursor**
 
+> 📚 **Documentação Técnica Completa:** [TECHNICAL.md](./TECHNICAL.md)
+
 ## 🚀 Início Rápido
 
 ### 1. Abrir Projeto
 ```bash
 # Clone e abra no Cursor
-git clone <repository-url>
-cd mcp-sqlserver
+git clone https://github.com/sammuka/NewSQL-Server-MCP.git
+cd NewSQL-Server-MCP
 cursor .
 ```
 
@@ -106,7 +108,7 @@ Crie/edite `.cursor/mcp-config.json`:
     "sqlserver": {
       "command": "python",
       "args": ["-m", "src.main"],
-      "cwd": "./mcp-sqlserver",
+      "cwd": "./",
       "env": {
         "DB_HOST": "localhost",
         "DB_PASSWORD": "YourPassword",
@@ -177,7 +179,7 @@ pip install -r requirements.txt
 ## 📁 Estrutura Importante
 
 ```
-mcp-sqlserver/
+NewSQL-Server-MCP/
 ├── 📄 .env                  ← Configure suas credenciais
 ├── 📄 docker-compose.yml    ← Deploy completo
 ├── 📄 example_client.py     ← Teste suas operações

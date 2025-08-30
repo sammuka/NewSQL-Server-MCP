@@ -3,14 +3,53 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-green.svg)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
 
 **Model Context Protocol (MCP) Server para SQL Server** - Um servidor MCP robusto e seguro que fornece acesso controlado a bancos de dados SQL Server através de ferramentas especializadas.
 
-> 🎯 **Usuários do Cursor**: Consulte o [**CURSOR_GUIDE.md**](docs/CURSOR_GUIDE.md) para configuração rápida em 5 minutos!
+> 🏠 **Repositório Principal:** [NewSQL-Server-MCP](https://github.com/sammuka/NewSQL-Server-MCP)  
+> 🎯 **Usuários do Cursor:** Consulte o [**CURSOR_GUIDE.md**](docs/CURSOR_GUIDE.md) para configuração rápida em 5 minutos!
+
+## 🚀 Início Rápido
+
+### 1. Clone do Repositório
+```bash
+# Clone do repositório principal
+git clone https://github.com/sammuka/NewSQL-Server-MCP.git
+cd NewSQL-Server-MCP/mcp-sqlserver
+```
+
+### 2. Deploy com Docker (Recomendado)
+```bash
+# Configurar credenciais
+cp config/.env.example .env
+# Editar .env com suas credenciais SQL Server
+
+# Deploy completo (MCP + SQL Server)
+docker-compose -f docker/docker-compose.yml up -d
+
+# OU apenas MCP Server (SQL Server externo)
+docker-compose -f docker/docker-compose.mcp-only.yml up -d
+```
+
+### 3. Verificar Funcionamento
+```bash
+# Health check
+curl http://localhost:4000/health
+
+# Documentação interativa
+open http://localhost:4000/docs
+```
+
+### 4. Teste com Cliente
+```bash
+# Executar cliente de exemplo
+python examples/example_client.py
+```
 
 ## 📋 Índice
 
+- [Início Rápido](#-início-rápido)
 - [Características](#-características)
 - [Modos de Operação](#-modos-de-operação)
 - [Instalação](#-instalação)
@@ -67,8 +106,8 @@ Modo completo com todas as operações:
 
 1. **Clone o repositório**:
 ```bash
-git clone <repository-url>
-cd mcp-sqlserver
+git clone https://github.com/sammuka/NewSQL-Server-MCP.git
+cd NewSQL-Server-MCP/mcp-sqlserver
 ```
 
 2. **Crie ambiente virtual**:
@@ -99,8 +138,8 @@ python -m src.main
 
 1. **Clone e configure**:
 ```bash
-git clone <repository-url>
-cd mcp-sqlserver
+git clone https://github.com/sammuka/NewSQL-Server-MCP.git
+cd NewSQL-Server-MCP/mcp-sqlserver
 cp config/.env.example .env
 # Configure o arquivo .env
 ```
@@ -130,8 +169,8 @@ Antes de configurar no Cursor, certifique-se de ter:
 
 ```bash
 # 1. Clone o repositório
-git clone <repository-url>
-cd mcp-sqlserver
+git clone https://github.com/sammuka/NewSQL-Server-MCP.git
+cd NewSQL-Server-MCP/mcp-sqlserver
 
 # 2. Abra no Cursor
 cursor .
